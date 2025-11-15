@@ -3,7 +3,7 @@ import { Text,configureTextBuilder } from "troika-three-text";
 configureTextBuilder({ gpuAccelerateSDF: true });  // Experimental but helps Arabic
 //import {reshape} from "./node_modules/js-arabic-reshaper/index.js";
 //const reshaped = reshape("./node_modules/js-arabic-reshaper/index.js");
-import {reshape} from "./node_modules/js-arabic-reshaper/index.js";
+import {reshape} from "./arReshaper.js";
 
 //import { reshape } from 'js-arabic-reshaper';
 
@@ -261,4 +261,5 @@ function stopRecording() {
     console.log("Recording stopped");
     recDot.style.backgroundColor = "red";
   }
+
 }
