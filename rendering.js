@@ -42,7 +42,7 @@ const cube = new THREE.Mesh(geometry, material);
 
 function pickFont(text) {
   const arabicRegex = /[\u0600-\u06FF]/;
-  return arabicRegex.test(text) ? "./fonts/Noto_Sans_Arabic/NotoSansArabic-VariableFont_wdth,wght.ttf" : "./fonts/Vend_Sans/VendSans-Italic-VariableFont_wght.ttf";
+  return arabicRegex.test(text) ? "./NotoSansArabic-Regular.ttf" : "./fonts/Vend_Sans/VendSans-Italic-VariableFont_wght.ttf";
 }
 function createTextMesh(line, size, color, maxWidth, lineHeight) {
   const textMesh = new Text();
@@ -263,3 +263,4 @@ function stopRecording() {
   }
 
 }
+
