@@ -1,0 +1,64 @@
+Exactly — the lag comes from the fact that the `"input"` event on a `<input type="color">` fires **continuously** while you drag the color wheel. Each tiny movement triggers a full rebuild of your text meshes, which is expensive in Three.js.
+
+---
+
+## ✅ Options to Fix the Sluggishness
+
+### 1. Use `"change"` instead of `"input"`
+The `"change"` event only fires when you release the mouse (or confirm the color), not on every drag step:
+
+```js
+document.getElementById("currentFontColor").addEventListener("change", e => {
+  window.lyricSettings.currentColor = e.target.value;
+  window.updateLyricsDisplay(window.currentLine, window.firstFive, window.lyricSettings);
+});
+```
+
+This way the update happens once, when you finish picking.
+
+---
+
+### 2. Debounce the `"input"` event
+If you still want live preview but smoother performance, you can throttle/debounce the calls:
+
+```js
+let colorTimeout;
+document.getElementById("currentFontColor").addEventListener("input", e => {
+  clearTimeout(colorTimeout);
+  colorTimeout = setTimeout(() => {
+    window.lyricSettings.currentColor = e.target.value;
+    window.updateLyricsDisplay(window.currentLine, window.firstFive, window.lyricSettings);
+  }, 150); // only update after 150ms of no changes
+});
+```
+
+This reduces the number of updates while dragging.
+
+---
+
+### 3. Update material color directly
+If you only want to change the color without rebuilding all text geometry, you can skip `updateLyricsDisplay` and just update the material:
+
+```js
+document.getElementById("currentFontColor").addEventListener("input", e => {
+  window.lyricSettings.currentColor = e.target.value;
+  if (window.currentLineMesh) {
+    window.currentLineMesh.children.forEach(child => {
+      if (child.isMesh) child.material.color.set(e.target.value);
+    });
+  }
+});
+```
+
+That way you don’t regenerate geometry every time — just recolor existing meshes.
+
+---
+
+## 🎯 Recommendation
+For smooth UX:
+- Use **`change`** if you’re fine with updating only after mouse release.  
+- Or use **direct material color updates** for live preview without heavy geometry rebuilds.  
+
+---
+
+👉 Mazen, do you want me to refactor your settings panel so **font color changes update materials directly**, while other settings (like font size or spacing) still trigger a full `updateLyricsDisplay`? That would give you instant color feedback without the lag.

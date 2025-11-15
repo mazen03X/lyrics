@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="1920" height="1080"></canvas>
+<button id="next">Next</button>
+<button id="startRec">Start Recording</button>
+<button id="stopRec">Stop & Save</button>
+<button id="reset">Reset</button>
+<button id="show">Show</button>
+<button id="hide">Hide</button>
+<button id="settingsBtn">⚙️ Settings</button>
+<div id="recDot"></div>
+
+
+
+
+<textarea id="lyric"></textarea>
+
+
+
+
+<div id="settingsPanel">
+  <!-- Tab buttons -->
+  <div id="tabs">
+    <button class="tabBtn" data-target="layoutSection">Layout</button>
+    <button class="tabBtn" data-target="animationSection">Animation</button>
+    <button class="tabBtn" data-target="colorSection">Colors</button>
+    <button class="tabBtn" data-target="displaySection">Display</button>
+    <button class="tabBtn" data-target="canvasSection">Canvas</button>
+  </div>
+
+  <!-- Tab content sections -->
+
+
+
+  <!-- Canvas Settings -->
+<div id="canvasSection" class="tabContent" style="display:none;">
+  <h3>Canvas Settings</h3>
+
+  <!-- Background -->
+  <label>Background Color:</label>
+  <input type="color" id="bgColor" value="#000000"><br>
+  <label>Background Image URL:</label>
+  <input type="text" id="bgImage" placeholder="Enter image URL"><br><br>
+
+  <!-- Current line -->
+  <h4>Current Line</h4>
+  <label>Font Size:</label>
+  <input type="number" id="currentFontSize" value="86"><br>
+  <label>Font Color:</label>
+  <input type="color" id="currentFontColor" value="#32CD32"><br>
+  <label>Position Y:</label>
+  <input type="number" id="currentPosY" value="100"><br><br>
+
+  <!-- First Five -->
+  <h4>First Five Lines</h4>
+  <label>Font Size:</label>
+  <input type="number" id="fiveFontSize" value="50"><br>
+  <label>Font Color:</label>
+  <input type="color" id="fiveFontColor" value="#FFFFFF"><br>
+  <label>Start Y:</label>
+  <input type="number" id="fiveStartY" value="200"><br>
+  <label>Spacing:</label>
+  <input type="number" id="fiveSpacing" value="50"><br><br>
+
+  <!-- Quick buttons -->
+  <h4>Quick Presets</h4>
+  <button class="presetBtn" data-bg="#000000" data-currentcolor="#32CD32" data-fivecolor="#FFFFFF">Default</button>
+  <button class="presetBtn" data-bg="#1a1a1a" data-currentcolor="#FFD700" data-fivecolor="#00FFFF">Neon</button>
+</div>
+
+   <!-- New Display tab content -->
+<div id="displaySection" class="tabContent" style="display:none;">
+  <h3>Display Settings</h3>
+
+  <!-- Resolution controls -->
+  <label>Canvas Width:</label>
+  <input type="number" id="canvasWidth" value="1920"><br>
+  <label>Canvas Height:</label>
+  <input type="number" id="canvasHeight" value="1080"><br><br>
+
+  <!-- CSS layout controls -->
+  <label>Canvas Display:</label>
+  <select id="canvasDisplay">
+    <option value="block">Block</option>
+    <option value="inline-block">Inline Block</option>
+    <option value="flex">Flex</option>
+    <option value="none">Hidden</option>
+  </select>
+</div>
+
+  <div id="layoutSection" class="tabContent">
+    <h3>Layout Settings</h3>
+      <!-- Quick size buttons -->
+  <div>
+    <button class="sizeBtn" data-width="640" data-height="360">Small (640×360)</button>
+    <button class="sizeBtn" data-width="1280" data-height="720">Medium (1280×720)</button>
+    <button class="sizeBtn" data-width="1920" data-height="1080">Large (1920×1080)</button>
+  </div>
+
+  <hr>
+
+  <!-- Custom size inputs -->
+  <label>Custom Width:</label>
+  <input type="number" id="customWidth" value="1920"><br>
+  <label>Custom Height:</label>
+  <input type="number" id="customHeight" value="1080"><br>
+  <button id="applyCustomSize">Apply Custom Size</button>
+<hr>
+    <select>
+      <option>Default</option>
+      <option>Compact</option>
+      <option>Wide</option>
+    </select>
+  </div>
+
+  <div id="animationSection" class="tabContent" style="display:none;">
+    <h3>Animation Settings</h3>
+     <!-- Current line animation -->
+  <h4>Current Line Animation</h4>
+  <select id="currentAnimation">
+    <option value="fade">Fade In</option>
+    <option value="slide">Slide In</option>
+    <option value="bounce">Bounce</option>
+    <option value="none">None</option>
+  </select><br><br>
+
+  <!-- Five lines animation -->
+  <h4>Five Lines Animation</h4>
+  <select id="fiveAnimation">
+    <option value="fade">Fade In</option>
+    <option value="slide">Slide In</option>
+    <option value="bounce">Bounce</option>
+    <option value="none">None</option>
+  </select>
+
+  </div>
+
+  <div id="colorSection" class="tabContent" style="display:none;">
+    <h3>Color Settings</h3>
+    <input type="color" value="#00ff00">
+  </div>
+</div>
+
+<script src="settings.js"></script>
+<script src="animation.js"></script>
+<script>
+
+const lyric = document.getElementById('lyric');
+const next = document.getElementById('next');
+const reset = document.getElementById('reset');
+const show = document.getElementById('show');
+const hide = document.getElementById('hide');
+
+let firstFive = [];
+let index = 1;
+let currentLine = "";
+
+const ctx = canvas.getContext('2d');
+const scale = window.devicePixelRatio;
+
+canvas.width = 1920 * scale;
+canvas.height = 1080 * scale;
+ctx.scale(scale, scale);
+
+
+function drawCanvas() {
+  // Background
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Animate current line
+  if (currentLine) {
+    animateCurrentLine(currentLine, 80, currentPosY);
+  }
+
+  // Animate five lines
+  firstFive.forEach((line, i) => {
+    animateFiveLine(line, 80, fiveStartY + i * fiveSpacing);
+  });
+}
+function drawText() {
+  // Current line
+  ctx.fillStyle = currentFontColor;
+  ctx.font = `${currentFontSize}px monospace`;
+  ctx.fillText(currentLine, 80, currentPosY);
+
+  // First five lines
+  ctx.fillStyle = fiveFontColor;
+  ctx.font = `${fiveFontSize}px monospace`;
+  firstFive.forEach((line, i) => {
+    ctx.fillText(line, 80, fiveStartY + i * fiveSpacing);
+  });
+}
+
+lyric.addEventListener("input", () => {
+  firstFive = lyric.value.split("\n").filter(l => l.trim() !== "").slice(0, 5);
+  drawCanvas();
+});
+
+next.addEventListener("click", () => {
+  currentLine = firstFive[0] || "";
+  firstFive = lyric.value.split("\n").filter(l => l.trim() !== "").slice(index, index + 5);
+  index++;
+  drawCanvas();
+});
+reset.addEventListener("click",()=>{
+     firstFive = [];
+    index = 1;
+    currentLine = "";
+      drawCanvas();
+      firstFive = lyric.value.split("\n").filter(l => l.trim() !== "").slice(0, 5);
+     
+});
+show.addEventListener("click",()=>{
+   
+    currentLine = "";
+       firstFive = lyric.value.split("\n").filter(l => l.trim() !== "").slice(index-1, index+4);
+       drawCanvas();
+
+});
+hide.addEventListener("click",()=>{
+   
+    currentLine = "";
+       firstFive = []
+       drawCanvas();
+
+});
+</script>
+<script>
+let recorder, chunks = [];
+
+document.getElementById("startRec").onclick = () => {
+  const stream = canvas.captureStream(60); // FPS
+  recorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recording.webm";
+    a.click();
+    URL.revokeObjectURL(url);
+    chunks = [];
+    recDot.style.backgroundColor = "red"; // back to red when stopped
+
+  };
+  recorder.start();
+  recDot.style.backgroundColor = "limegreen"; // turn green when recording
+  drawCanvas();
+};
+
+document.getElementById("stopRec").onclick = () => {
+  recorder && recorder.stop();
+};
+</script>
+</body>
+</html>

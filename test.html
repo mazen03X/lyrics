@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="stylesheet" href="styles.css">-->
+    <title>Document</title>
+
+    
+</head>
+<body>
+    <h1 id="current_line"></h1>
+    <p id="lines"></p>
+    <button id="next">next</button>
+    <textarea id="lyric"></textarea>
+    
+
+    <script>
+
+        const lyric = document.getElementById('lyric');
+        const lines = document.getElementById('lines');
+        const next = document.getElementById('next');
+        const c_line = document.getElementById('current_line');
+
+        let firstFive = "";
+         lyric.addEventListener("input", () => {
+        firstFive = lyric.value
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .slice(0, 5);
+
+        // join with line breaks so it displays nicely
+        lines.innerHTML = firstFive.join("<br>");
+        
+  });
+  let index =1;
+    next.addEventListener("click",()=>{
+        c_line.innerHTML = firstFive.slice(0,1);
+        firstFive = lyric.value
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .slice(index, index+5);
+        
+       lines.innerHTML = firstFive.join("<br>");
+       index++;
+
+    });
+
+
+    </script>
+</body>
+</html>

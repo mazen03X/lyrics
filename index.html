@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+     <style>
+html, body {
+   margin: 0;
+   height: 100%;
+}
+#c {
+   width: 70%;
+   height: 50%;
+   display: block;
+   border: 4px solid rgb(119, 124, 124); /* width + style + color */
+
+}
+</style>
+   <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "troika-three-text": "https://cdn.jsdelivr.net/npm/troika-three-text@0.52.4/dist/troika-three-text.esm.js",
+    "troika-three-utils": "https://cdn.jsdelivr.net/npm/troika-three-utils@0.52.0/dist/troika-three-utils.esm.js",
+    "troika-worker-utils": "https://cdn.jsdelivr.net/npm/troika-worker-utils@0.52.0/dist/troika-worker-utils.esm.js",
+    "webgl-sdf-generator": "https://cdn.jsdelivr.net/npm/webgl-sdf-generator@1.1.1/dist/webgl-sdf-generator.mjs",
+    "bidi-js": "https://cdn.jsdelivr.net/npm/bidi-js@1.0.3/dist/bidi.mjs"
+  }
+}
+</script>
+</head>
+<body>
+
+  <canvas id="c"></canvas>
+
+<button id="next">Next</button>
+<button id="startRec">Start Recording</button>
+<button id="stopRec">Stop & Save</button>
+<button id="reset">Reset</button>
+<button id="show">Show</button>
+<button id="hide">Hide</button>
+<button id="settingsBtn">⚙️ Settings</button>
+<div id="recDot"></div>
+
+
+
+
+<textarea id="lyric"></textarea>
+
+
+
+
+<div id="settingsPanel">
+    <div id="settingsHeader">⚙ Settings</div>
+  <!-- Tab buttons -->
+  <div id="tabs">
+    <button class="tabBtn" data-target="layoutSection">Layout</button>
+    <button class="tabBtn" data-target="animationSection">Animation</button>
+    <button class="tabBtn" data-target="colorSection">Colors</button>
+    <button class="tabBtn" data-target="displaySection">Display</button>
+    <button class="tabBtn" data-target="canvasSection">Canvas</button>
+  </div>
+
+  <!-- Tab content sections -->
+
+
+
+  <!-- Canvas Settings -->
+<div id="canvasSection" class="tabContent" style="display:none;">
+  <h3>Canvas Settings</h3>
+
+  <!-- Background -->
+  <label>Background Color:</label>
+  <input type="color" id="bgColor" value="#000000"><br>
+  <label>Background Image URL:</label>
+  <input type="text" id="bgImage" placeholder="Enter image URL"><br><br>
+
+  <!-- Current line -->
+  <h4>Current Line</h4>
+  <label>Font Size:</label>
+  <input type="number" id="currentFontSize" value="86"><br>
+  <label>Font Color:</label>
+  <input type="color" id="currentFontColor" value="#32CD32"><br>
+  <label>Position Y:</label>
+  <input type="number" id="currentPosY" value="100"><br><br>
+
+  <!-- First Five -->
+  <h4>First Five Lines</h4>
+  <label>Font Size:</label>
+  <input type="number" id="fiveFontSize" value="50"><br>
+  <label>Font Color:</label>
+  <input type="color" id="fiveFontColor" value="#FFFFFF"><br>
+  <label>Start Y:</label>
+  <input type="number" id="fiveStartY" value="200"><br>
+  <label>Spacing:</label>
+  <input type="number" id="fiveSpacing" value="50"><br><br>
+
+  <!-- Quick buttons -->
+  <h4>Quick Presets</h4>
+  <button class="presetBtn" data-bg="#000000" data-currentcolor="#32CD32" data-fivecolor="#FFFFFF">Default</button>
+  <button class="presetBtn" data-bg="#1a1a1a" data-currentcolor="#FFD700" data-fivecolor="#00FFFF">Neon</button>
+</div>
+
+   <!-- New Display tab content -->
+<div id="displaySection" class="tabContent" style="display:none;">
+  <h3>Display Settings</h3>
+
+  <!-- Resolution controls -->
+  <label>Canvas Width:</label>
+  <input type="number" id="canvasWidth" value="1920"><br>
+  <label>Canvas Height:</label>
+  <input type="number" id="canvasHeight" value="1080"><br><br>
+
+  <!-- CSS layout controls -->
+  <label>Canvas Display:</label>
+  <select id="canvasDisplay">
+    <option value="block">Block</option>
+    <option value="inline-block">Inline Block</option>
+    <option value="flex">Flex</option>
+    <option value="none">Hidden</option>
+  </select>
+</div>
+
+  <div id="layoutSection" class="tabContent">
+    <h3>Layout Settings</h3>
+      <!-- Quick size buttons -->
+  <div>
+    <button class="sizeBtn" data-width="640" data-height="360">Small (640×360)</button>
+    <button class="sizeBtn" data-width="1280" data-height="720">Medium (1280×720)</button>
+    <button class="sizeBtn" data-width="1920" data-height="1080">Large (1920×1080)</button>
+  </div>
+
+  <hr>
+
+  <!-- Custom size inputs -->
+  <label>Custom Width:</label>
+  <input type="number" id="customWidth" value="1920"><br>
+  <label>Custom Height:</label>
+  <input type="number" id="customHeight" value="1080"><br>
+  <button id="applyCustomSize">Apply Custom Size</button>
+<hr>
+    <select>
+      <option>Default</option>
+      <option>Compact</option>
+      <option>Wide</option>
+    </select>
+  </div>
+
+  <div id="animationSection" class="tabContent" style="display:none;">
+    <h3>Animation Settings</h3>
+     <!-- Current line animation -->
+  <h4>Current Line Animation</h4>
+  <select id="currentAnimation">
+    <option value="fade">Fade In</option>
+    <option value="slide">Slide In</option>
+    <option value="bounce">Bounce</option>
+    <option value="none">None</option>
+  </select><br><br>
+
+  <!-- Five lines animation -->
+  <h4>Five Lines Animation</h4>
+  <select id="fiveAnimation">
+    <option value="fade">Fade In</option>
+    <option value="slide">Slide In</option>
+    <option value="bounce">Bounce</option>
+    <option value="none">None</option>
+  </select>
+  <h4>Animation Presets</h4>
+     <button id="presetCalm" class="presetBtn">Calm</button>
+      <button id="presetEnergetic" class="presetBtn">Energetic</button>
+      <button id="presetWavey" class="presetBtn">Wavey</button>
+      <button id="presetNeon" class="presetBtn">Neon Glow</button>
+      <button id="clearPresets" class="presetBtn">Clear</button>
+
+  </div>
+
+  <div id="colorSection" class="tabContent" style="display:none;">
+    <h3>Color Settings</h3>
+    <input type="color" value="#00ff00">
+  </div>
+</div>
+
+
+
+    <!--<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>-->
+    <script type="module" src="rendering.js"></script>
+    <script type="module" src="settings.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+body {
+    background-color: black;   /* black background */
+    color: white;              /* default text white */
+    font-family: Arial, sans-serif;
+    height: 100%;
+}
+#myCanvas {
+    width: 480px;   /* display size */
+    height: 270px;  /* display size */
+    border: 1px solid #444;
+    font-size: 4rem;
+}
+#recDot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;   /* default: not recording */
+  display: inline-block;
+  margin-left: 10px;
+}
+#current_line {
+    color: limegreen;          /* current line in green */
+}
+
+#lines {
+    color: white;              /* five lines in white */
+    margin-top: 10px;
+}
+
+/* Textarea styling */
+#lyric {
+  display: block;        /* forces it onto its own line */
+  width: 40%;
+  max-width: 500px;          /* smaller width */
+  height: 250px;         /* adjust height as you like */
+  margin-top: 15px;      /* space below buttons */
+  background-color: #111;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: monospace;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+
+
+#settingsPanel {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  width: 300px;
+  padding: 15px;
+  background: #222;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 8px;
+  display: none;          /* hidden initially */
+  resize: both;           /* resizable */
+  overflow: auto;         /* scroll if content overflows */
+  z-index: 1000;          /* stay above other elements */
+          /* show move cursor */
+}
+
+#settingsPanel .section {
+  margin-bottom: 10px;
+}
+
+#settingsHeader {
+  background: #333;
+  padding: 2px;
+  cursor: move;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+#tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 6px;
+  background: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.tabBtn.active {
+  background: #555;
+}
+
+.tabContent {
+  margin-top: 10px;
+}

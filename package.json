@@ -1,0 +1,15 @@
+{
+  "name": "lyric_displayer_web",
+  "version": "1.0.0",
+  "main": "animation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "js-arabic-reshaper": "^1.0.0"
+  }
+}
